@@ -1,7 +1,7 @@
 ;; This is needed for Erlang mode setup
 (defun erlang-setup ()
-  (if (file-exists-p "/usr/local/gemini/ert/R14B01/lib/erlang")
-      (setq erlang-basefolder "/usr/local/gemini/ert/R14B01/lib/erlang")
+  (if (file-exists-p (expand-file-name "~/workbrew/lib/erlang"))
+      (setq erlang-basefolder (expand-file-name "~/workbrew/lib/erlang"))
     (if (file-exists-p "/usr/local/lib/erlang")
         (setq erlang-basefolder "/usr/local/lib/erlang")))
   (if erlang-basefolder
