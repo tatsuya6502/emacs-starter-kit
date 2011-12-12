@@ -62,3 +62,20 @@
 (slime-setup '(slime-repl slime-fancy slime-banner))
 ;; SLIMEからの入力をUTF-8に設定
 (setq slime-net-coding-system 'utf-8-unix)
+
+
+;; Auto Complete Mode
+
+(require 'auto-complete-config)
+(add-to-list 'ac-dictionary-directories "~/.emacs.d/ac-dict")
+(ac-config-default)
+
+;; append elrang-mode
+(setq ac-modes (append ac-modes (list 'erlang-mode)))
+
+;; ac-slime
+(add-to-list 'load-path "~/.emacs.d/ac-slime")
+(require 'ac-slime)
+(add-hook 'slime-mode-hook 'set-up-slime-ac)
+(add-hook 'slime-repl-mode-hook 'set-up-slime-ac)
+
