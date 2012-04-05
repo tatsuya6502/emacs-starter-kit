@@ -1,6 +1,7 @@
 
+
 (if (fboundp 'menu-bar-mode) (menu-bar-mode 1))
-(if (fboundp 'scroll-bar-mode) (set-scroll-bar-mode 'right))
+;; (if (fboundp 'scroll-bar-mode) (set-scroll-bar-mode 'right))
 
 ;; M-g で指定行へジャンプ
 (global-set-key "\M-g" 'goto-line)
@@ -12,13 +13,54 @@
 (show-paren-mode 1)
 
 
-;; Fonts setting
-(set-default-font "Inconsolata-10")
-(set-face-font 'variable-pitch "Inconsolata-10")
-(set-fontset-font (frame-parameter nil 'font)
-                  'japanese-jisx0208
-                  '("Takaoゴシック" . "unicode-bmp")
-)
+;; color-theme
+(setq load-path (cons "~/.emacs.d/color-theme-6.6.0" load-path))
+(require 'color-theme)
+(eval-after-load "color-theme"
+  '(progn
+     (color-theme-initialize)
+     (color-theme-tm)))
+
+;; whitespace
+(require 'whitespace)
+(setq whitespace-space 'underline)
+(set-default 'whitespace-auto-cleanup t)
+(set-default 'whitespace-check-buffer-leading nil)
+(set-default 'whitespace-check-buffer-trailing t)
+(set-default 'whitespace-check-buffer-indent nil)
+(set-default 'whitespace-check-buffer-spacetab t)
+(set-default 'whitespace-check-buffer-ateol t)
+(global-whitespace-mode 1)
+
+(add-hook 'after-change-major-mode-hook 'whitespace-mode)
+
+;; display only tails of lines longer than 80 columns, tabs and
+;; trailing whitespaces
+(setq whitespace-line-column 80
+      whitespace-style '(tabs trailing lines-tail))
+;; face for long lines' tails
+(set-face-attribute 'whitespace-line nil
+                    :background "gray20"
+                    :foreground "DarkSlateGray4"
+                    ;; :weight 'bold
+                    )
+;; face for Tabs
+(set-face-attribute 'whitespace-tab nil
+                    :background "gray20"
+                    :foreground "DarkSlateGray4"
+                    ;; :weight 'bold
+                    )
+
+;; before-save-hook
+(defun unix-newline () (set-buffer-file-coding-system 'undecided-unix))
+(add-hook 'before-save-hook 'unix-newline)
+(add-hook 'before-save-hook 'whitespace-cleanup)
+
+
+;; indent
+(setq-default c-basic-offset 4)
+(setq-default tab-width 4)
+(setq-default indent-tabs-mode nil)
 
 
 ;; Start server for emacs-client
@@ -78,4 +120,12 @@
 (require 'ac-slime)
 (add-hook 'slime-mode-hook 'set-up-slime-ac)
 (add-hook 'slime-repl-mode-hook 'set-up-slime-ac)
+
+;; Fonts setting
+(set-default-font "Inconsolata-10")
+(set-face-font 'variable-pitch "Inconsolata-10")
+(set-fontset-font (frame-parameter nil 'font)
+                   'japanese-jisx0208
+                   '("Takaoゴシック" . "unicode-bmp")
+                   )
 
